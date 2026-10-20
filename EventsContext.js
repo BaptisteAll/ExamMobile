@@ -8,9 +8,9 @@ const EventsContext = createContext();
 
 export function EventsProvider({ children }) {
 	const [events, setEvents] = useState([]);
-	const [isLoaded, setIsLoaded] = useState(false);
+	const [isLoaded, setIsLoaded] = useState(false); //S'assure que tout as bien été chargé
 
-	//Rend les évènements lisible
+	// Au démarrage : lit la sauvegarde dans AsyncStorage, puis remet la liste dans l'appli
 	useEffect(() => {
 		const loadEvents = async () => {
 			const saved = await AsyncStorage.getItem("events");

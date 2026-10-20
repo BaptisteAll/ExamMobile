@@ -1,11 +1,14 @@
+// Écran de formulaire : sert à créer un événement ET à modifier un événement existant
 import { useState } from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { useEvents } from "../EventsContext";
-import { Calendar } from 'react-native-calendars';
+import { Calendar } from "react-native-calendars";
 
 export default function AddEventScreen({ navigation, route }) {
+	// Événement reçu depuis la liste si on a cliqué sur "Modifier" ; vide si on vient de "Ajouter"
 	const eventToEdit = route.params?.event;
 	const { addEvent, updateEvent } = useEvents();
+	// Un état par champ du formulaire, pré-remplis quand on modifie un événement
 	const [title, setTitle] = useState(eventToEdit ? eventToEdit.title : "");
 	const [description, setDescription] = useState(
 		eventToEdit ? eventToEdit.description : "",
@@ -13,6 +16,7 @@ export default function AddEventScreen({ navigation, route }) {
 	const [date, setDate] = useState(eventToEdit ? eventToEdit.date : "");
 	const [error, setError] = useState("");
 
+	// Vérifie les champs obligatoires, construit l'événement, puis l'ajoute ou le met à jour
 	const handleSave = () => {
 		if (title === "" || date === "") {
 			setError("Le titre et la date sont obligatoires");
@@ -21,6 +25,7 @@ export default function AddEventScreen({ navigation, route }) {
 		setError("");
 
 		const newEvent = {
+			// En modifiant on garde le même ID d'origine, sinon on en crée un nouveau avec l'heure actuelle
 			id: eventToEdit ? eventToEdit.id : Date.now().toString(),
 			title,
 			description,
@@ -28,6 +33,7 @@ export default function AddEventScreen({ navigation, route }) {
 			participated: eventToEdit ? eventToEdit.participated : false,
 		};
 
+		// Si on modifie, on appelle updateEvent ; sinon on appelle addEvent
 		if (eventToEdit) {
 			updateEvent(newEvent);
 		} else {
@@ -37,28 +43,35 @@ export default function AddEventScreen({ navigation, route }) {
 	};
 
 	return (
-		<View style={{ flex: 1, padding: 20 }}>
+		<View style={styles.container}>
 			<TextInput
 				placeholder="Titre"
 				value={title}
 				onChangeText={setTitle}
-				style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+				style={styles.input}
 			/>
 			<TextInput
 				placeholder="Description"
 				value={description}
 				onChangeText={setDescription}
-				style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+				style={styles.input}
 			/>
 			<Text>Date choisie : {date}</Text>
-<Calendar
-  onDayPress={(day) => setDate(day.dateString)}
-  markedDates={{ [date]: { selected: true } }}
-/>
+			{/* Calendrier : au clic sur un jour, la date choisie est rangée dans l'état date */}
+			<Calendar
+				onDayPress={(day) => setDate(day.dateString)}
+				markedDates={{ [date]: { selected: true } }}
+			/>
 
-			{error !== "" && <Text style={{ color: "red" }}>{error}</Text>}
+			{error !== "" && <Text style={styles.error}>{error}</Text>}
 
 			<Button title="Enregistrer" onPress={handleSave} />
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: { flex: 1, padding: 20 },
+	input: { flex: 1, padding: 10, marginBottom: 10 },
+	error: { color: "red" },
+});
