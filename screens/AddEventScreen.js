@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
 import { useEvents } from "../EventsContext";
+import { Calendar } from 'react-native-calendars';
 
-export default function AddEventScreen({ navigation }) {
-	const { addEvent } = useEvents();
-	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("");
-	const [date, setDate] = useState("");
+export default function AddEventScreen({ navigation, route }) {
+	const eventToEdit = route.params?.event;
+	const { addEvent, updateEvent } = useEvents();
+	const [title, setTitle] = useState(eventToEdit ? eventToEdit.title : "");
+	const [description, setDescription] = useState(
+		eventToEdit ? eventToEdit.description : "",
+	);
+	const [date, setDate] = useState(eventToEdit ? eventToEdit.date : "");
 	const [error, setError] = useState("");
 
 	const handleSave = () => {
@@ -17,13 +21,18 @@ export default function AddEventScreen({ navigation }) {
 		setError("");
 
 		const newEvent = {
-      id: Date.now().toString(),
-      title,
-      description,
-      date,
-      participated: false,
-    };
-    addEvent(newEvent);
+			id: eventToEdit ? eventToEdit.id : Date.now().toString(),
+			title,
+			description,
+			date,
+			participated: eventToEdit ? eventToEdit.participated : false,
+		};
+
+		if (eventToEdit) {
+			updateEvent(newEvent);
+		} else {
+			addEvent(newEvent);
+		}
 		navigation.goBack();
 	};
 
@@ -41,12 +50,11 @@ export default function AddEventScreen({ navigation }) {
 				onChangeText={setDescription}
 				style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
 			/>
-			<TextInput
-				placeholder="Date (AAAA-MM-JJ)"
-				value={date}
-				onChangeText={setDate}
-				style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-			/>
+			<Text>Date choisie : {date}</Text>
+<Calendar
+  onDayPress={(day) => setDate(day.dateString)}
+  markedDates={{ [date]: { selected: true } }}
+/>
 
 			{error !== "" && <Text style={{ color: "red" }}>{error}</Text>}
 

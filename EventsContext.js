@@ -1,24 +1,57 @@
-import { createContext, useContext, useState } from 'react';
+// Panneau partagé qui garde la liste des événements pour tous les écrans
+// et la sauvegarde dans AsyncStorage pour qu'elle survive au rechargement
+
+import { createContext, useContext, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const EventsContext = createContext();
 
 export function EventsProvider({ children }) {
-  const [events, setEvents] = useState([
-    { id: '1', title: 'Conférence React', description: 'Introduction à React Native', date: '2026-11-05', participated: false },
-    { id: '2', title: 'Atelier cuisine', description: 'Cuisine du monde en groupe', date: '2026-11-12', participated: false },
-  ]);
+	const [events, setEvents] = useState([]);
+	const [isLoaded, setIsLoaded] = useState(false);
 
-  const addEvent = (newEvent) => {
-    setEvents([...events, newEvent]);
-  };
+	//Rend les évènements lisible
+	useEffect(() => {
+		const loadEvents = async () => {
+			const saved = await AsyncStorage.getItem("events");
+			if (saved !== null) {
+				setEvents(JSON.parse(saved));
+			}
+			setIsLoaded(true);
+		};
+		loadEvents();
+	}, []);
 
-  return (
-    <EventsContext.Provider value={{ events, setEvents, addEvent }}>
-      {children}
-    </EventsContext.Provider>
-  );
+	//Sauvegarde la liste dans AsyncStorage à chaque changement, mais seulement une fois le chargement terminé
+	useEffect(() => {
+		if (isLoaded) {
+			AsyncStorage.setItem("events", JSON.stringify(events));
+		}
+	}, [events, isLoaded]);
+
+	//Ajout d'évènement
+	const addEvent = (newEvent) => {
+		setEvents([...events, newEvent]);
+	};
+
+	//Modification d'évènement
+	const updateEvent = (updatedEvent) => {
+		const updatedEvents = events.map((event) =>
+			event.id === updatedEvent.id ? updatedEvent : event,
+		);
+		setEvents(updatedEvents);
+	};
+
+	return (
+		<EventsContext.Provider
+			value={{ events, setEvents, addEvent, updateEvent }}
+		>
+			{children}
+		</EventsContext.Provider>
+	);
 }
 
+//fonction utilisée par les écrans pour accéder à la liste et aux fonctions du panneau
 export function useEvents() {
-  return useContext(EventsContext);
+	return useContext(EventsContext);
 }

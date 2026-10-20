@@ -1,22 +1,24 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginScreen from './screens/LoginScreen';
-import EventListScreen from './screens/EventListScreen';
-import AddEventScreen from './screens/AddEventScreen';
-import { EventsProvider } from './EventsContext';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginScreen from "./screens/LoginScreen";
+import EventListScreen from "./screens/EventListScreen";
+import AddEventScreen from "./screens/AddEventScreen";
+import { EventsProvider } from "./EventsContext";
+import RegisterScreen from './screens/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return (
-    <EventsProvider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="AddScreen" component={AddEventScreen} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="EventList" component={EventListScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </EventsProvider>
-  );
+	return (
+		<EventsProvider>
+			<NavigationContainer>
+				<Stack.Navigator initialRouteName="Login">
+					<Stack.Screen name="AddScreen" component={AddEventScreen} />
+					<Stack.Screen name="Login" component={LoginScreen} />
+					<Stack.Screen name="EventList" component={EventListScreen} />
+					<Stack.Screen name="Register" component={RegisterScreen} />
+				</Stack.Navigator>
+			</NavigationContainer>
+		</EventsProvider>
+	);
 }
