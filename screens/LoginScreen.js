@@ -1,12 +1,12 @@
 // Écran de connexion : compare l'email et le mot de passe saisis aux comptes enregistrés,
 // puis ouvre la liste des événements si un compte correspond
-
-// Un état par champ du formulaire, plus un pour le message d'erreur
 import { useState } from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AppButton from "../components/AppButton";
 
 export default function LoginScreen({ navigation }) {
+	// Un état par champ du formulaire, plus un pour le message d'erreur
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
@@ -37,14 +37,14 @@ export default function LoginScreen({ navigation }) {
 	};
 
 	return (
-		<View style={{ flex: 1, justifyContent: "center", padding: 20 }}>
-			<Text>Connexion</Text>
+		<View style={styles.container}>
+			<Text style={styles.title}>Connexion</Text>
 
 			<TextInput
 				placeholder="Email"
 				value={email}
 				onChangeText={setEmail}
-				style={{ borderWidth: 1, padding: 10, marginVertical: 10 }}
+				style={styles.input}
 			/>
 
 			<TextInput
@@ -52,16 +52,33 @@ export default function LoginScreen({ navigation }) {
 				value={password}
 				onChangeText={setPassword}
 				secureTextEntry={true}
-				style={{ borderWidth: 1, padding: 10, marginVertical: 10 }}
+				style={styles.input}
 			/>
 
-			{error !== "" && <Text style={{ color: "red" }}>{error}</Text>}
+			{error !== "" && <Text style={styles.error}>{error}</Text>}
 
-			<Button title="Se connecter" onPress={handleLogin} />
-			<Button
-				title="Créer un compte"
-				onPress={() => navigation.navigate("Register")}
-			/>
+			{/* Boutons côte à côte : se connecter ou créer un compte */}
+			<View style={styles.buttonRow}>
+				<AppButton title="Se connecter" onPress={handleLogin} />
+				<AppButton
+					title="Créer un compte"
+					onPress={() => navigation.navigate("Register")}
+				/>
+			</View>
 		</View>
 	);
 }
+
+// Styles regroupés au même endroit (équivalent d'un fichier CSS)
+const styles = StyleSheet.create({
+	container: { flex: 1, justifyContent: "center", padding: 20 },
+	title: { fontWeight: "bold", fontSize: 20, marginBottom: 10 },
+	input: { borderWidth: 1, padding: 10, marginVertical: 10 },
+	error: { color: "red" },
+	buttonRow: {
+		flexDirection: "row",
+		justifyContent: "center",
+		gap: 5,
+		marginVertical: 5,
+	},
+});

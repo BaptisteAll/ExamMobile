@@ -1,8 +1,9 @@
 // Écran d'inscription : enregistre un nouveau compte (email + mot de passe) dans AsyncStorage
 
 import { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppButton from "../components/AppButton";
 
 export default function RegisterScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -34,23 +35,28 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+    <View style={styles.container}>
       <Text>Créer un compte</Text>
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        style={{ borderWidth: 1, padding: 10, marginVertical: 10 }}
+        style={styles.card}
       />
       <TextInput
         placeholder="Mot de passe"
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
-        style={{ borderWidth: 1, padding: 10, marginVertical: 10 }}
+        style={styles.card}
       />
       {error !== '' && <Text style={{ color: 'red' }}>{error}</Text>}
-      <Button title="S'inscrire" onPress={handleRegister} />
+      <AppButton title="S'inscrire" onPress={handleRegister} />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+	container: { flex: 1, justifyContent: 'center', padding: 20 },
+	card: { borderWidth: 1, padding: 10, marginVertical: 10 },
+});

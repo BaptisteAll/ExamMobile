@@ -52,7 +52,7 @@ export default function EventListScreen({ navigation }) {
 								title={
 									item.participated ? "Participé ✔" : "Marquer comme participé"
 								}
-								color={item.participated ? "#4CAF50" : "#2196F3"}
+								variant={item.participated ? "success" : "primary"}
 								onPress={() => toggleParticipated(item.id)}
 							/>
 						</View>
@@ -61,7 +61,7 @@ export default function EventListScreen({ navigation }) {
 						<View style={styles.buttonRow}>
 							<AppButton
 								title="Supprimer"
-								color="#D32F2F"
+								variant="danger"
 								onPress={() => deleteEvent(item.id)}
 							/>
 							{/* Bouton "Modifier" : ouvre le formulaire en lui envoyant l'événement */}
@@ -83,5 +83,10 @@ const styles = StyleSheet.create({
 	card: { padding: 15, marginBottom: 10, borderWidth: 1 },
 	title: { fontWeight: "bold" },
 	participateWrapper: { marginTop: 10, alignItems: "center" },
-	buttonRow: { flexDirection: "row", gap: 5, marginVertical: 5, justifyContent: "center" },
+	buttonRow: {
+		flexDirection: "row",
+		justifyContent: "center",
+		gap: 5,
+		marginVertical: 5,
+	},
 });

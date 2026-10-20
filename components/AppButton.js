@@ -1,13 +1,15 @@
 // Bouton personnalisé : remplace le Button natif, qui ne peut pas avoir de coins arrondis
 import { Pressable, Text, StyleSheet } from "react-native";
 
-export default function AppButton({ title, onPress, color = "#2196F3" }) {
+// variant choisit la couleur : "primary" (bleu), "danger" (rouge) ou "success" (vert)
+export default function AppButton({ title, onPress, variant = "primary" }) {
 	return (
 		<Pressable
 			onPress={onPress}
 			style={({ pressed }) => [
 				styles.button,
-				{ backgroundColor: color, opacity: pressed ? 0.7 : 1 },
+				styles[variant],
+				pressed && styles.pressed,
 			]}
 		>
 			<Text style={styles.text}>{title}</Text>
@@ -22,7 +24,10 @@ const styles = StyleSheet.create({
 		borderRadius: 8,
 		alignItems: "center",
 		justifyContent: "center",
-		alignSelf: "flex-start",
 	},
 	text: { color: "white", fontWeight: "600", textAlign: "center" },
+	primary: { backgroundColor: "#2196F3" },
+	danger: { backgroundColor: "#D32F2F" },
+	success: { backgroundColor: "#4CAF50" },
+	pressed: { opacity: 0.7 },
 });
