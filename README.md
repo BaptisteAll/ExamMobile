@@ -18,9 +18,14 @@
 
 9. **Organisation** : les écrans sont rangés dans le dossier `screens`, le bouton réutilisable `AppButton` dans `components`. À la racine se trouvent `App.js` (point d'entrée : il déclare les écrans) et `EventsContext.js` (données partagées).
 
-10. **Améliorations possibles** : (à compléter à la fin)
+10. **Améliorations possibles** :
+    - rattacher les événements à l'utilisateur connecté (aujourd'hui, la liste est commune à tous les comptes) ;
+    - ne plus stocker les mots de passe en clair ;
+    - soigner davantage l'affichage (thème, couleurs, icônes).
 
 ## Lancer le projet
 
+```bash
 npm install
 npx expo start --web
+```
