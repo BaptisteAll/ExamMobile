@@ -41,14 +41,14 @@ export default function RegisterScreen({ navigation }) {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        style={styles.card}
+        style={styles.input}
       />
       <TextInput
         placeholder="Mot de passe"
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
-        style={styles.card}
+        style={styles.input}
       />
       {error !== '' && <Text style={{ color: 'red' }}>{error}</Text>}
       <AppButton title="S'inscrire" onPress={handleRegister} />

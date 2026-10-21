@@ -1,8 +1,9 @@
 // Écran de formulaire : sert à créer un événement ET à modifier un événement existant
 import { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { ScrollView, View, Text, TextInput, StyleSheet } from "react-native";
 import { useEvents } from "../EventsContext";
 import { Calendar } from "react-native-calendars";
+import AppButton from "../components/AppButton";
 
 export default function AddEventScreen({ navigation, route }) {
 	// Événement reçu depuis la liste si on a cliqué sur "Modifier" ; vide si on vient de "Ajouter"
@@ -43,7 +44,8 @@ export default function AddEventScreen({ navigation, route }) {
 	};
 
 	return (
-		<View style={styles.container}>
+		// ScrollView : permet de faire défiler l'écran si le contenu dépasse (bouton toujours accessible)
+		<ScrollView contentContainerStyle={styles.container}>
 			<TextInput
 				placeholder="Titre"
 				value={title}
@@ -65,13 +67,17 @@ export default function AddEventScreen({ navigation, route }) {
 
 			{error !== "" && <Text style={styles.error}>{error}</Text>}
 
-			<Button title="Enregistrer" onPress={handleSave} />
-		</View>
+			<View style={styles.buttonWrapper}>
+				<AppButton title="Enregistrer" onPress={handleSave} />
+			</View>
+		</ScrollView>
 	);
 }
 
+// Styles regroupés au même endroit (équivalent d'un fichier CSS)
 const styles = StyleSheet.create({
-	container: { flex: 1, padding: 20 },
-	input: { flex: 1, padding: 10, marginBottom: 10 },
-	error: { color: "red" },
+	container: { padding: 20 },
+	input: { borderWidth: 1, padding: 10, marginBottom: 10 },
+	error: { color: "red", marginTop: 10 },
+	buttonWrapper: { alignItems: "center", marginTop: 10 },
 });

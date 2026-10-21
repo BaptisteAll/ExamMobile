@@ -1,12 +1,23 @@
 // Écran principal : affiche la liste des événements et permet d'ajouter un événement,
 // de le modifier, de le supprimer ou de le marquer comme participé
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+	View,
+	Text,
+	FlatList,
+	StyleSheet,
+	useWindowDimensions,
+} from "react-native";
 import { useEvents } from "../EventsContext";
 import AppButton from "../components/AppButton";
 
 export default function EventListScreen({ navigation }) {
 	// Récupère la liste et la fonction pour la modifier depuis le panneau partagé
 	const { events, setEvents } = useEvents();
+
+	// Largeur de la fenêtre : elle change si on redimensionne le navigateur ou si on tourne le téléphone
+	const { width } = useWindowDimensions();
+	// 2 colonnes sur petit écran (téléphone), 3 sur grand écran (ordinateur)
+	const numColumns = width < 750 ? 2 : 3;
 
 	// Supprime l'événement dont l'id est donné, en gardant tous les autres
 	const deleteEvent = (id) => {
@@ -36,39 +47,46 @@ export default function EventListScreen({ navigation }) {
 				/>
 			</View>
 
-			{/* Affiche chaque événement de la liste dans une carte */}
+			{/* Affiche les événements en grille : key force un nouveau rendu quand le nombre de colonnes change */}
 			<FlatList
+				key={numColumns}
+				numColumns={numColumns}
 				data={events}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => (
-					<View style={styles.card}>
-						<Text style={styles.title}>{item.title}</Text>
-						<Text>{item.description}</Text>
-						<Text>{item.date}</Text>
+					// La largeur dépend du nombre de colonnes, donc elle est calculée ici et pas dans le StyleSheet
+					<View style={[styles.cell, { width: `${100 / numColumns}%` }]}>
+						<View style={styles.card}>
+							<Text style={styles.title}>{item.title}</Text>
+<Text style={styles.info}>{item.description}</Text>
+<Text style={styles.info}>{item.date}</Text>
 
-						{/* Bouton "Participé" : seul sur sa ligne, au-dessus des deux autres */}
-						<View style={styles.participateWrapper}>
-							<AppButton
-								title={
-									item.participated ? "Participé ✔" : "Marquer comme participé"
-								}
-								variant={item.participated ? "success" : "primary"}
-								onPress={() => toggleParticipated(item.id)}
-							/>
-						</View>
+							{/* Bouton "Participé" : seul sur sa ligne, au-dessus des deux autres */}
+							<View style={styles.participateWrapper}>
+								<AppButton
+									title={
+										item.participated ? "Participé ✔" : "Marquer comme participé"
+									}
+									variant={item.participated ? "success" : "primary"}
+									onPress={() => toggleParticipated(item.id)}
+								/>
+							</View>
 
-						{/* "Supprimer" et "Modifier" côte à côte */}
-						<View style={styles.buttonRow}>
-							<AppButton
-								title="Supprimer"
-								variant="danger"
-								onPress={() => deleteEvent(item.id)}
-							/>
-							{/* Bouton "Modifier" : ouvre le formulaire en lui envoyant l'événement */}
-							<AppButton
-								title="Modifier"
-								onPress={() => navigation.navigate("AddScreen", { event: item })}
-							/>
+							{/* "Supprimer" et "Modifier" côte à côte */}
+							<View style={styles.buttonRow}>
+								<AppButton
+									title="Supprimer"
+									variant="danger"
+									onPress={() => deleteEvent(item.id)}
+								/>
+								{/* Bouton "Modifier" : ouvre le formulaire en lui envoyant l'événement */}
+								<AppButton
+									title="Modifier"
+									onPress={() =>
+										navigation.navigate("AddScreen", { event: item })
+									}
+								/>
+							</View>
 						</View>
 					</View>
 				)}
@@ -80,11 +98,14 @@ export default function EventListScreen({ navigation }) {
 // Styles regroupés au même endroit (équivalent d'un fichier CSS)
 const styles = StyleSheet.create({
 	container: { flex: 1, padding: 20 },
-	card: { padding: 15, marginBottom: 10, borderWidth: 1 },
-	title: { fontWeight: "bold" },
+	cell: { padding: 5 },
+	card: { flex: 1, padding: 15, borderWidth: 1 },
+	title: { fontWeight: "bold", textAlign: "center" },
+	info: { textAlign: "center" },
 	participateWrapper: { marginTop: 10, alignItems: "center" },
 	buttonRow: {
 		flexDirection: "row",
+		flexWrap: "wrap",
 		justifyContent: "center",
 		gap: 5,
 		marginVertical: 5,
