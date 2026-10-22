@@ -2,6 +2,7 @@
 import { View, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { useEvents } from "../EventsContext";
+import { calendarTheme } from "../theme";
 
 export default function CalendarScreen() {
 	const { events } = useEvents();
@@ -14,7 +15,7 @@ export default function CalendarScreen() {
 
 	return (
 		<View style={styles.container}>
-			<Calendar markedDates={markedDates} />
+			<Calendar theme={calendarTheme} markedDates={markedDates} />
 		</View>
 	);
 }

@@ -5,6 +5,7 @@ import { View, Text, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/AppButton";
 import AppInput from "../components/AppInput";
+import { theme } from "../theme";
 
 export default function LoginScreen({ navigation }) {
 	// Un état par champ du formulaire, plus un pour le message d'erreur
@@ -73,9 +74,9 @@ export default function LoginScreen({ navigation }) {
 // Styles regroupés au même endroit (équivalent d'un fichier CSS)
 const styles = StyleSheet.create({
 	container: { flex: 1, justifyContent: "center", padding: 20 },
-	title: { fontWeight: "bold", fontSize: 20, marginBottom: 10 },
+	title: { fontWeight: "bold", fontSize: 20, marginBottom: 10, color: theme.text },
 	input: { borderWidth: 1, padding: 10, marginVertical: 10 },
-	error: { color: "red" },
+	error: { color: theme.error },
 	buttonRow: {
 		flexDirection: "row",
 		justifyContent: "center",

@@ -22,6 +22,7 @@ export default function App() {
 						headerStyle: { backgroundColor: theme.header },
 						headerTintColor: theme.text,
 						headerTitleStyle: { fontWeight: "bold" },
+						contentStyle: { backgroundColor: theme.background },
 					}}
 				>
 					{/* Chaque écran a un name (pour y naviguer), un component (ce qu'il affiche) et un titre */}

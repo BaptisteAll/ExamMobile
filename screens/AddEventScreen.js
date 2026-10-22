@@ -5,6 +5,7 @@ import { useEvents } from "../EventsContext";
 import { Calendar } from "react-native-calendars";
 import AppButton from "../components/AppButton";
 import AppInput from "../components/AppInput";
+import { theme, calendarTheme } from "../theme";
 
 export default function AddEventScreen({ navigation, route }) {
 	// Événement reçu depuis la liste si on a cliqué sur "Modifier" ; vide si on vient de "Ajouter"
@@ -59,9 +60,10 @@ export default function AddEventScreen({ navigation, route }) {
 				onChangeText={setDescription}
 				style={styles.input}
 			/>
-			<Text>Date choisie : {date}</Text>
+			<Text style={styles.label}>Date choisie : {date}</Text>
 			{/* Calendrier : au clic sur un jour, la date choisie est rangée dans l'état date */}
 			<Calendar
+			theme={calendarTheme}
 				onDayPress={(day) => setDate(day.dateString)}
 				markedDates={{ [date]: { selected: true } }}
 			/>
@@ -79,6 +81,7 @@ export default function AddEventScreen({ navigation, route }) {
 const styles = StyleSheet.create({
 	container: { padding: 20 },
 	input: { borderWidth: 1, padding: 10, marginBottom: 10 },
-	error: { color: "red", marginTop: 10 },
+	error: { color: theme.error, marginTop: 10 },
+	label: { color: theme.text, marginBottom: 10 },
 	buttonWrapper: { alignItems: "center", marginTop: 10 },
 });

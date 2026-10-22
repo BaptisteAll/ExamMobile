@@ -7,6 +7,7 @@ import {
 	StyleSheet,
 	useWindowDimensions,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEvents } from "../EventsContext";
 import AppButton from "../components/AppButton";
 import { theme } from "../theme";
@@ -18,7 +19,7 @@ export default function EventListScreen({ navigation }) {
 	// Largeur de la fenêtre : elle change si on redimensionne le navigateur ou si on tourne le téléphone
 	const { width } = useWindowDimensions();
 	// 2 colonnes sur petit écran (téléphone), 3 sur grand écran (ordinateur)
-	const numColumns = width < 600 ? 2 : 3;
+	const numColumns = width < 750 ? 2 : 3;
 
 	// Supprime l'événement dont l'id est donné, en gardant tous les autres
 	const deleteEvent = (id) => {
@@ -57,8 +58,13 @@ export default function EventListScreen({ navigation }) {
 				renderItem={({ item }) => (
 					// La largeur dépend du nombre de colonnes, donc elle est calculée ici et pas dans le StyleSheet
 					<View style={[styles.cell, { width: `${100 / numColumns}%` }]}>
-						{/* Carte : bordure verte si l'événement est marqué comme participé */}
-						<View style={[styles.card, item.participated && styles.cardDone]}>
+						{/* Carte en dégradé : bordure verte si l'événement est marqué comme participé */}
+						<LinearGradient
+							colors={[theme.gradientStart, theme.gradientEnd]}
+							start={{ x: 0, y: 0 }}
+							end={{ x: 1, y: 1 }}
+							style={[styles.card, item.participated && styles.cardDone]}
+						>
 							<Text style={styles.title}>{item.title}</Text>
 							<Text style={styles.info}>{item.description}</Text>
 							<Text style={styles.info}>{item.date}</Text>
@@ -89,7 +95,7 @@ export default function EventListScreen({ navigation }) {
 									}
 								/>
 							</View>
-						</View>
+						</LinearGradient>
 					</View>
 				)}
 			/>
@@ -104,7 +110,6 @@ const styles = StyleSheet.create({
 	card: {
 		flex: 1,
 		padding: 15,
-		backgroundColor: theme.panel,
 		borderWidth: 1.5,
 		borderColor: theme.accent,
 		borderRadius: 12,
