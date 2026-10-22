@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useEvents } from "../EventsContext";
 import AppButton from "../components/AppButton";
+import { theme } from "../theme";
 
 export default function EventListScreen({ navigation }) {
 	// Récupère la liste et la fonction pour la modifier depuis le panneau partagé
@@ -17,7 +18,7 @@ export default function EventListScreen({ navigation }) {
 	// Largeur de la fenêtre : elle change si on redimensionne le navigateur ou si on tourne le téléphone
 	const { width } = useWindowDimensions();
 	// 2 colonnes sur petit écran (téléphone), 3 sur grand écran (ordinateur)
-	const numColumns = width < 750 ? 2 : 3;
+	const numColumns = width < 600 ? 2 : 3;
 
 	// Supprime l'événement dont l'id est donné, en gardant tous les autres
 	const deleteEvent = (id) => {
@@ -56,10 +57,11 @@ export default function EventListScreen({ navigation }) {
 				renderItem={({ item }) => (
 					// La largeur dépend du nombre de colonnes, donc elle est calculée ici et pas dans le StyleSheet
 					<View style={[styles.cell, { width: `${100 / numColumns}%` }]}>
-						<View style={styles.card}>
+						{/* Carte : bordure verte si l'événement est marqué comme participé */}
+						<View style={[styles.card, item.participated && styles.cardDone]}>
 							<Text style={styles.title}>{item.title}</Text>
-<Text style={styles.info}>{item.description}</Text>
-<Text style={styles.info}>{item.date}</Text>
+							<Text style={styles.info}>{item.description}</Text>
+							<Text style={styles.info}>{item.date}</Text>
 
 							{/* Bouton "Participé" : seul sur sa ligne, au-dessus des deux autres */}
 							<View style={styles.participateWrapper}>
@@ -99,9 +101,22 @@ export default function EventListScreen({ navigation }) {
 const styles = StyleSheet.create({
 	container: { flex: 1, padding: 20 },
 	cell: { padding: 5 },
-	card: { flex: 1, padding: 15, borderWidth: 1 },
-	title: { fontWeight: "bold", textAlign: "center" },
-	info: { textAlign: "center" },
+	card: {
+		flex: 1,
+		padding: 15,
+		backgroundColor: theme.panel,
+		borderWidth: 1.5,
+		borderColor: theme.accent,
+		borderRadius: 12,
+	},
+	cardDone: { borderColor: theme.success },
+	title: {
+		fontWeight: "bold",
+		fontSize: 16,
+		textAlign: "center",
+		color: theme.accentLight,
+	},
+	info: { textAlign: "center", color: theme.textMuted },
 	participateWrapper: { marginTop: 10, alignItems: "center" },
 	buttonRow: {
 		flexDirection: "row",

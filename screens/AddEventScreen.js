@@ -1,9 +1,10 @@
 // Écran de formulaire : sert à créer un événement ET à modifier un événement existant
 import { useState } from "react";
-import { ScrollView, View, Text, TextInput, StyleSheet } from "react-native";
+import { ScrollView, View, Text, StyleSheet } from "react-native";
 import { useEvents } from "../EventsContext";
 import { Calendar } from "react-native-calendars";
 import AppButton from "../components/AppButton";
+import AppInput from "../components/AppInput";
 
 export default function AddEventScreen({ navigation, route }) {
 	// Événement reçu depuis la liste si on a cliqué sur "Modifier" ; vide si on vient de "Ajouter"
@@ -46,13 +47,13 @@ export default function AddEventScreen({ navigation, route }) {
 	return (
 		// ScrollView : permet de faire défiler l'écran si le contenu dépasse (bouton toujours accessible)
 		<ScrollView contentContainerStyle={styles.container}>
-			<TextInput
+			<AppInput
 				placeholder="Titre"
 				value={title}
 				onChangeText={setTitle}
 				style={styles.input}
 			/>
-			<TextInput
+			<AppInput
 				placeholder="Description"
 				value={description}
 				onChangeText={setDescription}
