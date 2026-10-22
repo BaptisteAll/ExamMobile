@@ -16,13 +16,13 @@
 
 8. **Limite connue** : les mots de passe sont stockés en clair, acceptable pour un prototype mais à ne pas faire en production.
 
-9. **Organisation** : les écrans sont rangés dans le dossier `screens`, le bouton réutilisable `AppButton` dans `components`. À la racine se trouvent `App.js` (point d'entrée : il déclare les écrans) et `EventsContext.js` (données partagées).
+9. **Organisation** : les écrans sont rangés dans le dossier `screens`, les composants réutilisables (`AppButton`, `AppInput`) dans `components`. À la racine se trouvent `App.js` (point d'entrée : il déclare les écrans), `EventsContext.js` (données partagées) et `theme.js` (palette de couleurs de l'application).
 
 10. **Améliorations possibles** :
     - rattacher les événements à l'utilisateur connecté (aujourd'hui, la liste est commune à tous les comptes) ;
     - ne plus stocker les mots de passe en clair ;
-    - soigner davantage l'affichage (thème, couleurs, icônes).
-
+    - ajouter un mode clair/sombre commutable et des icônes.
+    
 ## Lancer le projet
 
 ```bash
